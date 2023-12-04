@@ -9,7 +9,7 @@ from word2number import w2n
 class DialogEngine:
 
   ################################################################################################# 
-  ################ Construction and initialization of info from response data file ################
+  ############# Construction and initialization of object from response data files ################
 
   # class constructor
   def __new__(cls, *args, **kwargs):
@@ -169,21 +169,29 @@ class DialogEngine:
     prompt = self.parse_for_prompt(phrase, self.resp_dict)
     
     # if prompt not found in phrase, parse against synonyms for prompts
-    if prompt == None:
+    if prompt is None:
       prompt = self.parse_for_prompt(phrase, self.syn_dict)
       
     #TODO debug line
     print("prompt found: ", prompt) 
     
     # If synonym still not found, return None, otherwise convert synonym to corresponding prompt
-    if prompt == None:
+    if prompt is None:
       return "unkn", None, None
     else:
-      prompt = self.syn_dict.get(phrase)
-      
-    # Get response
-    response, actions = self.resp_dict.get(phrase)
-  
+    # Use the found prompt, or default to itself if not in syn_dict
+      prompt = self.syn_dict.get(prompt, prompt)  
+
+    # Try to get the response and actions from the dictionary
+    result = self.resp_dict.get(prompt)
+
+    # Check if result is not None
+    if result is not None:
+      response, actions = result
+    else:
+      # Handle the case where the prompt is not found
+      response, actions = "No response found", None
+
     # Return tuple of response string, response actions ints lists, and response parsed number int
     return response, actions, number
     
