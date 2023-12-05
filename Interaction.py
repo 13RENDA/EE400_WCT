@@ -36,7 +36,7 @@ class Interaction:
   ############# Acrtion functions to interact with subsystems for user requests ###################
     
   # Function to log an unsucesful interaction with a user--no follow-on system actions occur
-  def unsuccesful():
+  def unsuccesful(self):
     self.actions_performed += "unsucessful"
     
   # Function to send a room ID to car for dispatch  
@@ -78,7 +78,7 @@ class Interaction:
     minutes = remainder // 60
 
     # Format the start time
-    start_time_str = start_time.strftime("%Y-%m-%d %H:%M:%S")
+    start_time_str = self.start_time.strftime("%Y-%m-%d %H:%M:%S")
 
     # Create the formatted time string
     formatted_time_string = f"{start_time_str}, {hours}:{minutes:02d}"

@@ -1,7 +1,7 @@
 # Demo system manager
 
 import AudioHandler as ah
-import AudioTextTransformer as att
+import AudioTextTransformer as at
 import DialogEngine as de
 import KeyboardActionListener as kal
 import Interaction
@@ -31,7 +31,7 @@ dialog = de.DialogEngine("./demo_files/demo_responses.csv",
                          "./demo_files/demo_room_ids.csv",
                          "./demo_files/demo_room_info.csv")
 audio = ah.AudioHandler(system_audio_in_index)
-a2t = att.AudioTextTransformer(deepspeech_model_filename, 
+att = at.AudioTextTransformer(deepspeech_model_filename, 
                                deepspeech_scorer_filename, 
                                tts_model_path, 
                                tts_config_path, 
@@ -58,7 +58,8 @@ def complete_interaction(text_response, interaction_object):
   log_info = interaction_object.end()
   logger.log_interaction(log_info)
   time.sleep(response_delay_millis / 1000)
-  a2t.text2audio(text_response)
+  audio_file_name = at.text2audio(text_response)
+  ah.play_audio(audio_file_name)
   # print(text_response)
     
   
@@ -66,7 +67,7 @@ def complete_interaction(text_response, interaction_object):
 def get_new_request():
   time.sleep(response_delay_millis / 1000)
   # print("I'm sorry, I didn't understand your last request. Let's try again. How can I help you?")
-  a2t.text2audio("I'm sorry, I didn't understand your last request. Let's try again. How can I help you?")
+  att.text2audio("I'm sorry, I didn't understand your last request. Let's try again. How can I help you?")
   interaction_complete == True
   
 # MAIN SYSTEM RESPONSE LOGIC  
@@ -74,8 +75,8 @@ def get_new_request():
 def process_request():
   keylistener.suspend()
   input_audio_file = audio.stop_recording()
-  request = a2t.audio2text(input_audio_file)
-  initial_response, room_number, action = dialog.response(request)
+  request_text = att.audio2text(input_audio_file)
+  initial_response, room_number, action = dialog.response(request_text)
   
   # if request not understood
   if (text_response == "unkn"):
@@ -135,7 +136,6 @@ while (quit == False):
   interaction_complete = False
   keylistener.start()
   print("Hold down 'space' to record input\n\n(press q to quit)\n")
-  keylistener.join()
   while (True):
     if interaction_complete == True:
       break

@@ -47,3 +47,4 @@ class AudioTextTransformer:
 
     # Save the output as a WAV file
     sf.write(self.text_to_audio_wavefile_name, wav, 22050, format='WAV', subtype='PCM_16')
+    return text_to_audio_file_name
