@@ -18,21 +18,26 @@ class DialogEngine:
   # initialization builds dictionaries from input synonym and reponse files
   #   input synonym file format:    line:  "<synonym> <prompt>"
   #   input reponse file format:    line:  "<prompt> <syn> <syn> ... <syn>"
-  def __init__(self, input_response_file_name, input_syn_file_name):
+  def __init__(self, 
+               input_response_file_name, 
+               input_syn_file_name,
+               input_room_id_file_name,
+               input_room_info_file_name):
     self.syn_file_name = input_syn_file_name
     self.resp_file_name = input_response_file_name
     self.syn_dict = self.build_syn_dict(input_syn_file_name)
     self.resp_dict = self.build_response_dict(input_response_file_name)
+    self.room_id_dict = self.build_syn_dict(input_room_id_file_name)
+    self.room_info_dict = self.build_response_dict(input_room_info_file_name)
 
   # build {input_prompt : response} dictionary from .txt file containing response
-  # dictionary, each line formatted as "<input_prompt> <response>"
+  # dictionary, each line formatted as "<input_prompt> <response, actions>"
   def build_response_dict(cls, input_response_file_name):
     resp_dict = {}
     with open(input_response_file_name, mode='r', newline='', encoding='utf-8') as csvfile:
       csvreader = csv.reader(csvfile, delimiter='|')
       for row in csvreader:
         if len(row) >= 3:
-          print(row)
           # Assuming the first column is the prompt and the second is the response
           prompt = row[0].strip()
           response = row[1].strip()
@@ -49,12 +54,37 @@ class DialogEngine:
       for row in csvreader:
         if len(row) >= 2:
           # The first item is the prompt and the rest are synonyms
-          print(row)
           prompt = row[0].strip()
           synonyms = [syn.strip() for syn in row[1:]]
           for syn in synonyms:
             syn_dict[syn] = prompt
     return syn_dict
+  
+  # build {synonym : input_prompt} dictionary from .txt file containing input-synonyms
+  # dictionary data, each line formatted as "<prompt> <input_syn1 input_syn2..>"
+  def build_room_info_dict(cls, input_room_id_file_name):
+    id_dict = {}
+    with open(input_room_id_file_name, mode='r', newline='', encoding='utf-8') as csvfile:
+      csvreader = csv.reader(csvfile, delimiter='|')
+      for row in csvreader:
+        if len(row) >= 2:
+          room_number = row[0].strip()
+          room_id = row[1].strip()
+          id_dict[room_number] = room_id
+    return id_dict
+  
+  # build {synonym : input_prompt} dictionary from .txt file containing input-synonyms
+  # dictionary data, each line formatted as "<prompt> <input_syn1 input_syn2..>"
+  def build_room_info_dict(cls, input_room_info_file_name):
+    info_dict = {}
+    with open(input_room_info_file_name, mode='r', newline='', encoding='utf-8') as csvfile:
+      csvreader = csv.reader(csvfile, delimiter='|')
+      for row in csvreader:
+        if len(row) >= 2:
+          room = row[0].strip()
+          info = row[1]
+          info_dict[room] = info
+    return info_dict
   
   ################################################################################################# 
   ################ functions to generate data text files from object dictionaries ################# 

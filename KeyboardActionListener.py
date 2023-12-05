@@ -24,7 +24,16 @@ class KeyActionListener:
       return False
 
   def start(self):
+    if not self.listener.is_alive():
+      self.listener = keyboard.Listener(
+        on_press=self.on_press,
+        on_release=self.on_release)
     self.listener.start()
 
   def join(self):
     self.listener.join()
+
+  def suspend(self):
+    # Simply stop the listener without performing any stop actions
+    if self.listener.is_alive():
+      self.listener.stop()
