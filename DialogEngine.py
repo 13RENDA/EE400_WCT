@@ -23,8 +23,12 @@ class DialogEngine:
                input_syn_file_name,
                input_room_id_file_name,
                input_room_info_file_name):
+    
     self.syn_file_name = input_syn_file_name
     self.resp_file_name = input_response_file_name
+    self.input_room_id_file_name = input_room_id_file_name
+    self.input_room_info_file_name = input_room_info_file_name
+    
     self.syn_dict = self.build_syn_dict(input_syn_file_name)
     self.resp_dict = self.build_response_dict(input_response_file_name)
     self.room_id_dict = self.build_syn_dict(input_room_id_file_name)
