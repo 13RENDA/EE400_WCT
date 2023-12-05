@@ -1,6 +1,7 @@
 import csv
 import time
 from datetime import datetime
+import os
 
 # Object to handle an interaction with subsystems to meet user requests
 class Interaction:
@@ -15,7 +16,7 @@ class Interaction:
     
     # time to delay response output by in order more naturtally mirror human comprehension/action
     # must in terms of seconds for time.sleep() function
-    self.response_delay_secs = (float)response_delay_millis / 1000
+    self.response_delay_secs = float(response_delay_millis) / 1000
     
     # {room_number : room_id} dictionary. Intended to be inialized from "DialogEngine.room_id_dict"
     self.room_id_dict = room_id_dict
@@ -65,7 +66,7 @@ class Interaction:
   ################################################################################################# 
   ############# Functions to end interaction and return interaction time data #####################
   
-  def end(self)
+  def end(self):
     # Interaction end time
     end_time = datetime.utcnow()
   
