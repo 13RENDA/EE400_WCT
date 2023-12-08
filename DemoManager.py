@@ -13,16 +13,16 @@ import time
 # audio input device index--> use "ffmpeg -f avfoundation -list_devices true -i" command
 #                             in linux terminal to get indices associate AV IO devices
 #                             spice input withh ":<index number>"
-system_audio_in_index = ":1"
-deepspeech_model_filename = ""
-deepspeech_scorer_filename = ""
-tts_model_path = ""
-tts_config_path = ""
-tts_vocoder_path = ""
-tts_vocoder_config_path = ""
+system_audio_in_index = "hw:0,0"
+deepspeech_model_filename = "./stt_model/deepspeech-0.9.3-models.pbmm"
+deepspeech_scorer_filename = "./stt_model/deepspeech-0.9.3-models.pbmm"
+tts_model_path = "./tts_model/tts_model.pth.tar"
+tts_config_path = "./tts_model/tts_model_config.json"
+tts_vocoder_path = "./tts_model/tts_vocoder.tar"
+tts_vocoder_config_path = "./tts_model/tts_vocoder_config.json"
 audio_in_file_name = "request.wav"
 audio_out_file_name = "response.wav"
-log_file_path = "./"
+log_file_path = "./logs/"
 response_delay_millis = 500. # must be double value
 
 # set up system objects
@@ -30,7 +30,7 @@ dialog = de.DialogEngine("./demo_files/demo_responses.csv",
                          "./demo_files/demo_synonyms.csv",
                          "./demo_files/demo_room_ids.csv",
                          "./demo_files/demo_room_info.csv")
-audio = ah.AudioHandler(system_audio_in_index)
+audio = ah.AudioHandlerLinux(system_audio_in_index)
 att = at.AudioTextTransformer(deepspeech_model_filename, 
                                deepspeech_scorer_filename, 
                                tts_model_path, 

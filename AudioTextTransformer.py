@@ -9,7 +9,8 @@ class AudioTextTransformer:
   def __new__(cls, *args, **kwargs):
     return super().__new__(cls)
 
-  # initializer
+  # initialize
+
   # set up deepspeech model and enable scorer to improve performance
   def __init__(self, 
                deepspeech_model_filename, 
